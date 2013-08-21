@@ -67,8 +67,6 @@ class Theme_Settings {
    *
    * @since 1.0
    * @access private
-   *
-   * @return void
    */
 
   private function __construct () {}
@@ -78,8 +76,6 @@ class Theme_Settings {
    *
    * @since 1.0
    * @access private
-   *
-   * @return void
    */
 
   private function constants () {
@@ -90,13 +86,13 @@ class Theme_Settings {
    *
    * @since 1.0
    * @access private
-   *
-   * @return void
    */
 
   private function includes () {
+    require ($this->plugin_dir . 'ts-core/ts-functions.php');
     require ($this->plugin_dir . 'ts-core/ts-admin.php');
-    require ($this->plugin_dir . 'ts-core/ts-tab.php');
+    require ($this->plugin_dir . 'ts-core/ts-actions.php');
+    require ($this->plugin_dir . 'ts-core/ts-page.php');
   }
 
   /**
@@ -104,8 +100,6 @@ class Theme_Settings {
    *
    * @since 1.0
    * @access private
-   *
-   * @return void
    */
 
   private function setup_globals () {
@@ -121,8 +115,6 @@ class Theme_Settings {
    *
    * @since 1.0
    * @access private
-   *
-   * @return void
    */
 
   private function setup_actions () {
@@ -142,6 +134,6 @@ function theme_settings () {
 }
 
 // Let's make it global too!
-$GLOBAL['ts'] = &theme_settings();
+$GLOBALS['ts'] = &theme_settings();
 
 endif;

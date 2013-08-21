@@ -1,6 +1,6 @@
 <?php
 
-class Colors extends TS_Tab {
+class Colors extends TS_Page {
 
   /**
    * Set options for this tab

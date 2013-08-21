@@ -10,11 +10,12 @@
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
-if (!class_exists('TS_Tab')):
+if (!class_exists('TS_Page')):
 
-class TS_Tab {
+class TS_Page {
 
   public function __construct (array $options = array()) {
+    $this->add_sub_page($options);
     $this->setup_globals();
     $this->load_tabs();
     $this->collect_methods();
@@ -25,8 +26,6 @@ class TS_Tab {
    *
    * @since 1.0
    * @access private
-   *
-   * @return void
    */
 
   private function setup_globals () {
@@ -46,7 +45,8 @@ class TS_Tab {
   private function collect_methods ($klass) {
     $tab_methods = get_class_methods($klass);
     $parent_methods = get_class_methods(get_parent_class($klass));
-    return array_diff($tab_methods, $parent_methods);
+   // return array_diff($tab_methods, $parent_methods);
+   return array();
   }
 
   /**
@@ -54,29 +54,51 @@ class TS_Tab {
    *
    * @since 1.0
    * @access private
-   *
-   * @return void
    */
 
   private function load_tabs () {
-    if (!defined('TS_TABS_PATH')) {
+    if (!defined('TS_PAGE_PATH')) {
       // define some default
-      define('TS_TABS_PATH', dirname(__FILE__) . '/../ideas/');
+      define('TS_PAGE_PATH', dirname(__FILE__) . '/../ideas/');
     }
+    /*
 
     if (!class_exists('Colors')) {
       // strange error...
-      require (TS_TABS_PATH . 'colors-tab.php');
-      $name = basename(TS_TABS_PATH . 'colors-tab.php', '.php');
-      $name = str_replace('-tab', '', $name);
+      require (TS_PAGE_PATH . 'colors-page.php');
+      $name = basename(TS_PAGE_PATH . 'colors-page.php', '.php');
+      $name = str_replace('-page', '', $name);
       $name = ucfirst($name);
       $klass = new $name;
       $methods = $this->collect_methods($klass);
-      var_dump($methods);
     }
+
+    */
   }
+
+  /**
+   * Add sub page.
+   *
+   * @since 1.0
+   * @access private
+   */
+
+  private function add_sub_page (array $options = array()) {
+    $options = (object)$options;
+    $slug = ts_slug($options->name);
+    //add_submenu_page('options.php', $options->name, $options->name, 'manage_options', $slug, array($this, 'page_callback'));
+  }
+
+  /**
+   * Callback
+   *
+   * @since 1.0
+   * @access private
+   */
+
+  private function page_callback () {}
 }
 
 endif;
 
-$ts_tab = new TS_Tab;
+$ts_page = new TS_Page;
