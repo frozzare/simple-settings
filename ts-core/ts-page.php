@@ -7,6 +7,8 @@
  * @license The MIT License
  */
 
+// THIS FILE WILL BE DELETED!
+
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 

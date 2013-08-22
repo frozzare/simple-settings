@@ -32,7 +32,14 @@ class TS_Admin {
    */
 
    private function setup_globals () {
+     $ts = theme_settings();
 
+     // Paths and URLs
+     $this->admin_dir  = trailingslashit($ts->plugin_dir  . 'ts-core/admin' );
+     $this->admin_url  = trailingslashit($ts->plugin_url  . 'ts-core/admin' ); // Admin url
+     $this->images_url = trailingslashit($this->admin_url . 'images'        ); // Admin images URL
+     $this->css_url    = trailingslashit($this->admin_url . 'css'           ); // Admin css URL
+     $this->js_url     = trailingslashit($this->admin_url . 'js'            ); // Admin css URL
    }
 
    /**
@@ -43,7 +50,7 @@ class TS_Admin {
     */
 
     private function includes () {
-
+      require($this->admin_dir . 'ts-actions.php');
     }
 
     /**
@@ -58,7 +65,7 @@ class TS_Admin {
        //add_action('ts_admin_head', array($this, 'admin_head'), 999);
 
        // Add menu item to the menu
-       add_action('admin_menu', array($this, 'admin_menus'), 5);
+       add_action('ts_admin_menu', array($this, 'admin_menus'), 5);
 
        // Enqueue all admin assets
        //add_action('ts_admin_enqueue_scripts', array($this, 'enqueue_scripts'));
