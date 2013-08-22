@@ -45,8 +45,8 @@ class TS_Page {
   private function collect_methods ($klass) {
     $tab_methods = get_class_methods($klass);
     $parent_methods = get_class_methods(get_parent_class($klass));
-   // return array_diff($tab_methods, $parent_methods);
-   return array();
+    return array_diff($tab_methods, $parent_methods);
+   //return array();
   }
 
   /**
@@ -61,19 +61,22 @@ class TS_Page {
       // define some default
       define('TS_PAGE_PATH', dirname(__FILE__) . '/../ideas/');
     }
-    /*
 
-    if (!class_exists('Colors')) {
+
+    if (!class_exists('General')) {
       // strange error...
-      require (TS_PAGE_PATH . 'colors-page.php');
-      $name = basename(TS_PAGE_PATH . 'colors-page.php', '.php');
+      require (TS_PAGE_PATH . 'general-page.php');
+      $name = basename(TS_PAGE_PATH . 'general-page.php', '.php');
       $name = str_replace('-page', '', $name);
       $name = ucfirst($name);
       $klass = new $name;
       $methods = $this->collect_methods($klass);
+      foreach ($methods as $method) {
+        $this->create_field($klass->$method());
+      }
+
     }
 
-    */
   }
 
   /**
@@ -97,6 +100,9 @@ class TS_Page {
    */
 
   private function page_callback () {}
+
+  private function create_field (array $options = array()) {
+  }
 }
 
 endif;

@@ -9,4 +9,5 @@
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
-add_action('plugins_loaded', 'ts_admin', 10);
+add_action('plugins_loaded', 'ts_fields', 10);
+add_action('plugins_loaded', 'ts_admin', 11);

@@ -19,7 +19,7 @@
 // Exit if accessed directly.
 if (!defined('ABSPATH')) exit;
 
-// Check so Theme Settings class don't exists before we creat it.
+// Check so class don't exists before we creat it.
 if (!class_exists('Theme_Settings')):
 
 /**
@@ -79,6 +79,21 @@ class Theme_Settings {
    */
 
   private function constants () {
+    // Path to Theme settings plugin directory
+    if (!defined('TS_PLUGIN_DIR')) {
+      define('TS_PLUGIN_DIR', trailingslashit(WP_PLUGIN_DIR . '/theme-settings'));
+    }
+
+    // URL to Theme settings plugin directory
+    if (!defined('TS_PLUGIN_URL')) {
+      $plugin_url = plugin_dir_url(__FILE__);
+
+      if (is_ssl()) {
+        $plugin_url = str_replace('http://', 'https://', $plugin_url);
+      }
+
+      define('TS_PLUGIN_URL', $plugin_url);
+    }
   }
 
   /**
@@ -92,6 +107,7 @@ class Theme_Settings {
     require ($this->plugin_dir . 'ts-core/ts-functions.php');
     require ($this->plugin_dir . 'ts-core/ts-admin.php');
     require ($this->plugin_dir . 'ts-core/ts-actions.php');
+    require ($this->plugin_dir . 'ts-fields/ts-fields-loader.php');
     require ($this->plugin_dir . 'ts-core/ts-page.php');
   }
 
@@ -108,6 +124,12 @@ class Theme_Settings {
     $this->db_version_raw   = 0;
 
     $this->table_prefix     = 'ts_';
+
+    // Paths
+    $this->file             = __FILE__;
+    $this->basename         = plugin_basename($this->file);
+    $this->plugin_dir       = TS_PLUGIN_DIR;
+    $this->plugin_url       = TS_PLUGIN_URL;
   }
 
   /**

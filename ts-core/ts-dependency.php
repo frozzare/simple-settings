@@ -7,4 +7,6 @@
  * @license The MIT License
  */
 
-function 
+function ts_activation () {
+  do_action('ts_activation');
+}
