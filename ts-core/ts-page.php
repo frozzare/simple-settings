@@ -12,9 +12,9 @@
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
-if (!class_exists('TS_Page')):
+if (!class_exists('')):
 
-class TS_Page {
+class TS_Page2 {
 
   public function __construct (array $options = array()) {
     $this->add_sub_page($options);
@@ -109,4 +109,4 @@ class TS_Page {
 
 endif;
 
-$ts_page = new TS_Page;
+// $ts_page = new TS_Page;

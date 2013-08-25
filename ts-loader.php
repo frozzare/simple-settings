@@ -108,7 +108,7 @@ class Theme_Settings {
     require ($this->plugin_dir . 'ts-core/ts-admin.php');
     require ($this->plugin_dir . 'ts-core/ts-actions.php');
     require ($this->plugin_dir . 'ts-fields/ts-fields-loader.php');
-    require ($this->plugin_dir . 'ts-core/ts-page.php');
+    require ($this->plugin_dir . 'ts-page/ts-page-loader.php');
   }
 
   /**

@@ -47,6 +47,8 @@ class TS_Page_Loader {
    */
 
   private function includes () {
+    require($this->page_dir . 'ts-page-class.php');
+    require($this->page_dir . 'ts-page-admin.php');
   }
 
   /**
@@ -60,8 +62,6 @@ class TS_Page_Loader {
   }
 }
 
-function ts_page () {
-  new TS_Page_Loader();
-}
+new TS_Page_Loader();
 
 endif;

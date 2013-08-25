@@ -65,8 +65,6 @@ class TS_Fields_Loader {
 
 }
 
-function ts_fields () {
-  new TS_Fields_Loader();
-}
+new TS_Fields_Loader();
 
 endif;

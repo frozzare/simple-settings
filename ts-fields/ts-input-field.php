@@ -20,7 +20,7 @@ class TS_Input_Field extends TS_Tag {
    * @var array
    */
 
-  private $attributes = array('type', 'name', 'class', 'placeholder', 'value');
+  private $attributes = array('type', 'name', 'placeholder', 'value');
 
   /**
    * Empty construct.
