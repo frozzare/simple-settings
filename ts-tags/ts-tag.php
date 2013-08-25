@@ -31,6 +31,14 @@ class TS_Tag {
   private $tag_start = '';
 
   /**
+   * End of the start tag.
+   *
+   * @var string
+   */
+
+  private $tag_start_end = '';
+
+  /**
    * End of the tag.
    *
    * @var string
@@ -45,6 +53,40 @@ class TS_Tag {
    */
 
   private $html = '';
+
+  /**
+   * Tag constructor.
+   *
+   * @param array $attributes
+   *
+   * @since 1.0
+   */
+
+  public function __construct (array $attributes = array()) {
+    if (isset($attributes['html'])) {
+      $this->setHtml($attributes['html']);
+      unset($attributes['html']);
+    }
+    $this->setAttributes($attributes);
+  }
+
+  /**
+   * Reset attributes array and html string.
+   *
+   * @param bool tag
+   *
+   * @since 1.0
+   */
+
+   public function reset ($tag = false) {
+     $this->attributes = array();
+     $this->html = '';
+     if ($tag) {
+       $this->tag_start = '';
+       $this->tag_start_end = '';
+       $this->tag_end = '';
+     }
+   }
 
   /**
    * Set attributes.
@@ -109,8 +151,14 @@ class TS_Tag {
    * @since 1.0
    */
 
-  public function setTag ($start, $end) {
+  public function setTag ($start = '', $start_end = '', $end = '') {
+    if (is_null($end)) {
+      $end = $start_end;
+      $start_end = null;
+    }
+
     $this->tag_start = $start . ' ';
+    $this->tag_start_end = $start_end;
     $this->tag_end = $end;
   }
 
@@ -140,7 +188,6 @@ class TS_Tag {
   /**
    * Render html tag.
    *
-   * @param string $content
    * @since 1.0
    *
    * @return string
@@ -148,16 +195,36 @@ class TS_Tag {
 
   public function render () {
     $attributes = '';
-    if (!is_string($this->attributes['class']
+    /*if (!is_string($this->attributes['class']
       && in_array($this->attributes['type'], array('text')))) {
       $this->setAttribute('class', 'regular-text');
-    }
+    }*/
     foreach ($this->attributes as $key => $value) {
       if (is_string($key)) {
+        if ($key == 'name') $value = tsarialize($value);
         $attributes .= $key .= '="' . $value . '"';
       }
     }
-    return $this->tag_start . $attributes . $this->tag_end;
+    $tag = $this->tag_start . $attributes;
+    if (!is_null($this->tag_start_end)) {
+      $tag .= $this->tag_start_end;
+      if (!is_null($this->html)) {
+        $tag .= $this->html;
+      }
+    }
+    return $tag . $this->tag_end;
+  }
+
+  /**
+   * Output html tag.
+   *
+   * @since 1.0
+   *
+   * @return string
+   */
+
+  public function display () {
+    echo $this->render();
   }
 }
 

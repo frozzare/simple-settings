@@ -11,9 +11,9 @@
 if (!defined('ABSPATH')) exit;
 
 // Check so class don't exists before we creat it.
-if (!class_exists('TS_Fields_Loader')):
+if (!class_exists('TS_Tags_Loader')):
 
-class TS_Fields_Loader {
+class TS_Tags_Loader {
 
   /**
    * Construct.
@@ -36,8 +36,7 @@ class TS_Fields_Loader {
 
   private function setup_globals () {
     $ts = theme_settings();
-    $this->fields_dir = trailingslashit($ts->plugin_dir . 'ts-fields');
-    $this->field_types_dir = trailingslashit($this->fields_dir) . 'fields/';
+    $this->tags_dir = trailingslashit($ts->plugin_dir . 'ts-tags');
   }
 
   /**
@@ -48,9 +47,10 @@ class TS_Fields_Loader {
    */
 
   private function includes () {
-    require($this->fields_dir . 'ts-tag.php');
-    require($this->fields_dir . 'ts-input-field.php');
-    require($this->field_types_dir . 'ts-input-text.php');
+    require($this->tags_dir . 'ts-tag.php');
+    foreach (glob($this->tags_dir . 'tags/*') as $file) {
+      require($file);
+    }
   }
 
   /**
@@ -65,6 +65,6 @@ class TS_Fields_Loader {
 
 }
 
-new TS_Fields_Loader();
+new TS_tags_Loader();
 
 endif;

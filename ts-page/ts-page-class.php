@@ -106,63 +106,97 @@ class TS_Page {
   }
 
   /**
-   * Callback
+   * Update settings.
+   *
+   * @since 1.0
+   */
+
+  public function update_settings () {
+    if (isset($_POST['action']) && $_POST['action'] === 'update') {
+      $pattern = '/' . str_replace('_', '\_', tsarialize()) . '.*/';
+      $keys = preg_grep($pattern, array_keys($_POST));
+      foreach ($keys as $key) {
+        ts_update_option($key, $_POST[$key]);
+      }
+    }
+  }
+
+  /**
+   * Page callback.
    *
    * @since 1.0
    */
 
   public function page_callback () {
+    $this->update_settings();
     $name = $this->options['name'];
     $methods = $this->collect_methods($this);
     ?>
     <div class="wrap">
       <div id="icon-options-general" class="icon32"><br></div>
       <h2><?= __( $name . ' settings', 'theme_settings' ); ?></h2>
-      <table class="form-table">
-        <tbody>
-          <?php foreach ($methods as $method):
-            $data = $this->$method();
-            if (isset($data['label']) && isset($data['field']) && isset($data['name'])):
-          ?>
-          <tr valign="top">
-            <th scope="row">
-              <label for><?= $data['label']; ?></label>
-            </th>
-            <td>
-              <?php
-                $field = $this->get_field($data['field'], $data['name']);
-                echo $field->render();
-             ?>
-            </td>
-          </tr>
-        <?php
-            endif;
-          endforeach; ?>
-        </tbody>
-      </table>
+      <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="update" />
+        <table class="form-table">
+          <tbody>
+            <?php
+              foreach ($methods as $method):
+                $options = $this->$method();
+                $this->page_tr_row($options);
+              endforeach;
+            ?>
+          </tbody>
+        </table>
+        <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"></p>
+      </form>
     </div>
     <?php
   }
 
-  /**
-   * Get input field.
-   *
-   * @param string $type
-   * @since 1.0
-   *
-   * @return object
-   */
-
-  public function get_field ($type, $name) {
-    switch ($type) {
-      case 'text':
-        $field = new TS_Input_Text();
-        $field->setAttribute('name', $name);
-        return $field;
-        break;
-      default:
-        return new stdClass();
-    }
+  public function page_tr_row (array $options = array()) {
+    ?>
+    <tr valign="top">
+      <th scope="row">
+        <?php
+          $args = array(
+            'html' => $options['label']
+          );
+          if (isset($options['name'])) {
+            $args['for'] = $options['name'];
+          }
+          $label = new TS_Label_Tag($args);
+          $label->display();
+        ?>
+      </th>
+      <td>
+        <?php
+          if (isset($options['input']) || isset($options['textarea']) || isset($options['select'])) {
+            if (isset($options['input'])) {
+              $field = new TS_Input_Tag (array(
+                'name' => $options['name'],
+                'value' => ts_get_option($options['name']),
+                'type' => $options['input']['type']
+              ));
+            } else if (isset($options['textarea'])) {
+              $field = new TS_Textarea_Tag (array(
+                'name' => $options['name'],
+                'html' => ts_get_option($options['name'])
+              ));
+            } else if (isset($options['select'])) {
+              $field = new TS_Select_Tag(array(
+                'name' => $options['name'],
+                'options' => $options['select']['options'],
+                'selected' => ts_get_option($options['name'], $options['select']['selected'])
+              ));
+            }
+            $field->display();
+          } else {
+            echo $options['html'];
+          }
+        ?>
+      </td>
+   </tr>
+    <?php
   }
 
   /**
@@ -173,7 +207,6 @@ class TS_Page {
    */
 
   private function setup_actions () {
-    if (empty($this->options)) return;
     add_action('ts_admin_menu', array($this, 'setup_page'));
   }
 

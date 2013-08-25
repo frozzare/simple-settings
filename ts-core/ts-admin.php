@@ -86,7 +86,9 @@ class TS_Admin {
         __('Theme settings', 'theme_settings'),
         'manage_options', // manage_options
         'ts-page',
-        array($this, 'ts_page')
+        array($this, 'ts_page'),
+        '',
+        82
       );
     }
 
