@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Theme settings
+ * Simple settings
  *
  * @copyright Copyright 2013 Fredrik Forsmo (http://forsmo.me)
  * @license The MIT License
@@ -10,19 +10,22 @@
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
-if (!class_exists('TS_Textarea_Tag')):
+if (!class_exists('ST_Label_Tag')):
 
-class TS_Textarea_Tag extends TS_Tag {
+class ST_Label_Tag extends ST_Tag {
 
   /**
-   * Textarea constructor.
+   * Label constructor.
    *
    * @since 1.0
    */
 
   public function __construct (array $attributes = array()) {
+    if (isset($attributes['for'])) {
+      $attributes['for'] = starialize($attributes['for']);
+    }
     parent::__construct($attributes);
-    $this->setTag('<textarea', '>', '</textarea>');
+    $this->setTag('<label', '>', '</label>');
   }
 
 }

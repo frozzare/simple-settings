@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Theme settings
+ * Simple settings
  *
  * @copyright Copyright 2013 Fredrik Forsmo (http://forsmo.me)
  * @license The MIT License
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) exit;
  * @return string
  */
 
-function ts_slug ($text) {
+function st_slug ($text) {
   $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
   $text = trim($text, '-');
   $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
@@ -28,8 +28,8 @@ function ts_slug ($text) {
 }
 
 /**
- * Add `ts_` to the beginning of the string if it don't exists
- * or return just `ts_`.
+ * Add `st_` to the beginning of the string if it don't exists
+ * or return just `st_`.
  *
  * @param string $str
  * @since 1.0
@@ -37,12 +37,12 @@ function ts_slug ($text) {
  * @return string
  */
 
-function tsarialize ($str = null) {
+function starialize ($str = null) {
   if (!is_null($str)) {
-    if (strpos($str, 'ts_') === false) {
-      $str = 'ts_' . $str;
+    if (strpos($str, 'st_') === false) {
+      $str = 'st_' . $str;
     }
     return $str;
   }
-  return 'ts_';
+  return 'st_';
 }

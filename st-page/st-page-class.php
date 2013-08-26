@@ -10,11 +10,11 @@
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
-if (!class_exists('TS_Page')):
+if (!class_exists('ST_Page')):
 
-class TS_Page {
+class ST_Page {
 
-  private $key = 'TS_Page';
+  private $key = 'ST_Page';
 
   private $pages;
 
@@ -62,15 +62,15 @@ class TS_Page {
    */
 
   private function load_pages () {
-    if (!defined('TS_PAGE_PATH')) {
-      define('TS_PAGE_PATH', get_template_directory() . '/inc/ts-pages/');
+    if (!defined('ST_PAGE_PATH')) {
+      define('ST_PAGE_PATH', get_template_directory() . '/inc/st-pages/');
     }
-    foreach (glob(TS_PAGE_PATH . '*') as $file) {
+    foreach (glob(ST_PAGE_PATH . '*') as $file) {
       require_once($file);
       $name = basename($file, '.php');
-      $name = str_replace('-ts-page', '', $name);
+      $name = str_replace('-st-page', '', $name);
       $name = ucfirst($name);
-      $name .= '_TS_Page';
+      $name .= '_ST_Page';
       if (!isset($this->pages[$name])) {
         $this->pages[$name] = new $name;
       }
@@ -85,8 +85,8 @@ class TS_Page {
 
   public function setup_page () {
     if (empty($this->options)) return;
-    $slug = 'ts-' . ts_slug($this->options['name']);
-    add_submenu_page('ts-page', $this->options['name'], $this->options['name'], 'manage_options', $slug, array($this, 'page_callback'));
+    $slug = 'st-' . st_slug($this->options['name']);
+    add_submenu_page('st-page', $this->options['name'], $this->options['name'], 'manage_options', $slug, array($this, 'page_callback'));
   }
 
   /**
@@ -113,10 +113,10 @@ class TS_Page {
 
   public function update_settings () {
     if (isset($_POST['action']) && $_POST['action'] === 'update') {
-      $pattern = '/' . str_replace('_', '\_', tsarialize()) . '.*/';
+      $pattern = '/' . str_replace('_', '\_', starialize()) . '.*/';
       $keys = preg_grep($pattern, array_keys($_POST));
       foreach ($keys as $key) {
-        ts_update_option($key, $_POST[$key]);
+        st_update_option($key, $_POST[$key]);
       }
     }
   }
@@ -134,7 +134,7 @@ class TS_Page {
     ?>
     <div class="wrap">
       <div id="icon-options-general" class="icon32"><br></div>
-      <h2><?= __( $name . ' settings', 'theme_settings' ); ?></h2>
+      <h2><?= __( $name . ' settings', 'simple_settings' ); ?></h2>
       <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="update" />
         <table class="form-table">
@@ -164,7 +164,7 @@ class TS_Page {
           if (isset($options['name'])) {
             $args['for'] = $options['name'];
           }
-          $label = new TS_Label_Tag($args);
+          $label = new ST_Label_Tag($args);
           $label->display();
         ?>
       </th>
@@ -172,21 +172,21 @@ class TS_Page {
         <?php
           if (isset($options['input']) || isset($options['textarea']) || isset($options['select'])) {
             if (isset($options['input'])) {
-              $field = new TS_Input_Tag (array(
+              $field = new ST_Input_Tag (array(
                 'name' => $options['name'],
-                'value' => ts_get_option($options['name']),
+                'value' => st_get_option($options['name']),
                 'type' => $options['input']['type']
               ));
             } else if (isset($options['textarea'])) {
-              $field = new TS_Textarea_Tag (array(
+              $field = new ST_Textarea_Tag (array(
                 'name' => $options['name'],
-                'html' => ts_get_option($options['name'])
+                'html' => st_get_option($options['name'])
               ));
             } else if (isset($options['select'])) {
-              $field = new TS_Select_Tag(array(
+              $field = new ST_Select_Tag(array(
                 'name' => $options['name'],
                 'options' => $options['select']['options'],
-                'selected' => ts_get_option($options['name'], $options['select']['selected'])
+                'selected' => st_get_option($options['name'], $options['select']['selected'])
               ));
             }
             $field->display();
@@ -207,15 +207,15 @@ class TS_Page {
    */
 
   private function setup_actions () {
-    add_action('ts_admin_menu', array($this, 'setup_page'));
+    add_action('st_admin_menu', array($this, 'setup_page'));
   }
 
 }
 
-function ts_page () {
-  new TS_Page();
+function st_page () {
+  new ST_Page();
 }
 
-ts_page();
+st_page();
 
 endif;

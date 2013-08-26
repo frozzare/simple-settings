@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Theme settings
+ * Simple settings
  *
  * @copyright Copyright 2013 Fredrik Forsmo (http://forsmo.me)
  * @license The MIT License
@@ -11,9 +11,9 @@
 if (!defined('ABSPATH')) exit;
 
 // Check so class don't exists before we creat it.
-if (!class_exists('TS_Tags_Loader')):
+if (!class_exists('ST_Page_Loader')):
 
-class TS_Tags_Loader {
+class ST_Page_Loader {
 
   /**
    * Construct.
@@ -35,8 +35,8 @@ class TS_Tags_Loader {
    */
 
   private function setup_globals () {
-    $ts = theme_settings();
-    $this->tags_dir = trailingslashit($ts->plugin_dir . 'ts-tags');
+    $st = simple_settings();
+    $this->page_dir = trailingslashit($st->plugin_dir . 'st-page');
   }
 
   /**
@@ -47,10 +47,9 @@ class TS_Tags_Loader {
    */
 
   private function includes () {
-    require($this->tags_dir . 'ts-tag.php');
-    foreach (glob($this->tags_dir . 'tags/*') as $file) {
-      require($file);
-    }
+    require($this->page_dir . 'st-functions.php');
+    require($this->page_dir . 'st-page-class.php');
+    require($this->page_dir . 'st-page-admin.php');
   }
 
   /**
@@ -62,9 +61,8 @@ class TS_Tags_Loader {
 
   private function setup_actions () {
   }
-
 }
 
-new TS_tags_Loader();
+new ST_Page_Loader();
 
 endif;

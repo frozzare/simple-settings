@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Theme settings
+ * Simple settings
  *
  * @copyright Copyright 2013 Fredrik Forsmo (http://forsmo.me)
  * @license The MIT License
@@ -10,9 +10,9 @@
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
-if (!class_exists('TS_Tag')):
+if (!class_exists('ST_Tag')):
 
-class TS_Tag {
+class ST_Tag {
 
   /**
    * Attributes.
@@ -201,7 +201,7 @@ class TS_Tag {
     }*/
     foreach ($this->attributes as $key => $value) {
       if (is_string($key)) {
-        if ($key == 'name') $value = tsarialize($value);
+        if ($key == 'name') $value = starialize($value);
         $attributes .= $key .= '="' . $value . '"';
       }
     }

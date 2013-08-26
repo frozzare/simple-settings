@@ -1,39 +1,39 @@
 <?php
 
 /**
- * Theme settings
+ * Simple Settings
  *
  * @copyright Copyright 2013 Fredrik Forsmo (http://forsmo.me)
  * @license The MIT License
  */
 
 /**
- * Plugin Name: WordPress Theme Settings
- * Description: Settings page for your theme
+ * Plugin Name: Simple Settings
+ * Description: Simple Settings page
  * Author: Fredrik Forsmo
  * Author URI: http://forsmo.me/
  * Version: 1.0
- * Plugin URI: https://github.com/frozzare/theme-settings
+ * Plugin URI: https://github.com/frozzare/simple-settings
  */
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) exit;
 
 // Check so class don't exists before we creat it.
-if (!class_exists('Theme_Settings')):
+if (!class_exists('Simple Settings')):
 
 /**
- * Theme Settings class.
+ * Simple Settings class.
  *
  * Tap tap tap... Is this thing on?
  *
  * @since 1.0
  */
 
-class Theme_Settings {
+class Simple_Settings {
 
   /**
-   * The instance of Theme Settings
+   * The instance of Simple Settings
    *
    * @since 1.0
    *
@@ -47,12 +47,12 @@ class Theme_Settings {
    *
    * @since 1.0
    *
-   * @return The instance of Theme Settings
+   * @return The instance of Simple Settings
    */
 
   public static function instance () {
     if (!isset(self::$instance)) {
-      self::$instance = new Theme_Settings;
+      self::$instance = new Simple_Settings;
       self::$instance->constants();
       self::$instance->setup_globals();
       self::$instance->includes();
@@ -79,20 +79,20 @@ class Theme_Settings {
    */
 
   private function constants () {
-    // Path to Theme settings plugin directory
-    if (!defined('TS_PLUGIN_DIR')) {
-      define('TS_PLUGIN_DIR', trailingslashit(WP_PLUGIN_DIR . '/theme-settings'));
+    // Path to Simple settings plugin directory
+    if (!defined('ST_PLUGIN_DIR')) {
+      define('ST_PLUGIN_DIR', trailingslashit(WP_PLUGIN_DIR . '/simple-settings'));
     }
 
-    // URL to Theme settings plugin directory
-    if (!defined('TS_PLUGIN_URL')) {
+    // URL to Simple settings plugin directory
+    if (!defined('ST_PLUGIN_URL')) {
       $plugin_url = plugin_dir_url(__FILE__);
 
       if (is_ssl()) {
         $plugin_url = str_replace('http://', 'https://', $plugin_url);
       }
 
-      define('TS_PLUGIN_URL', $plugin_url);
+      define('ST_PLUGIN_URL', $plugin_url);
     }
   }
 
@@ -104,11 +104,11 @@ class Theme_Settings {
    */
 
   private function includes () {
-    require ($this->plugin_dir . 'ts-core/ts-functions.php');
-    require ($this->plugin_dir . 'ts-core/ts-admin.php');
-    require ($this->plugin_dir . 'ts-core/ts-actions.php');
-    require ($this->plugin_dir . 'ts-tags/ts-tags-loader.php');
-    require ($this->plugin_dir . 'ts-page/ts-page-loader.php');
+    require ($this->plugin_dir . 'st-core/st-functions.php');
+    require ($this->plugin_dir . 'st-core/st-admin.php');
+    require ($this->plugin_dir . 'st-core/st-actions.php');
+    require ($this->plugin_dir . 'st-tags/st-tags-loader.php');
+    require ($this->plugin_dir . 'st-page/st-page-loader.php');
   }
 
   /**
@@ -123,13 +123,13 @@ class Theme_Settings {
     $this->db_version       = 100;
     $this->db_version_raw   = 0;
 
-    $this->table_prefix     = 'ts_';
+    $this->table_prefix     = 'st_';
 
     // Paths
     $this->file             = __FILE__;
     $this->basename         = plugin_basename($this->file);
-    $this->plugin_dir       = TS_PLUGIN_DIR;
-    $this->plugin_url       = TS_PLUGIN_URL;
+    $this->plugin_dir       = ST_PLUGIN_DIR;
+    $this->plugin_url       = ST_PLUGIN_URL;
   }
 
   /**
@@ -140,22 +140,22 @@ class Theme_Settings {
    */
 
   private function setup_actions () {
-    add_action('activate_' . $this->basename, 'ts_activation');
-    add_action('deactivate_' . $this->basename, 'ts_deactivation');
+    add_action('activate_' . $this->basename, 'st_activation');
+    add_action('deactivate_' . $this->basename, 'st_deactivation');
   }
 }
 
 /**
- * Returning the Theme Settings instance to everyone.
+ * Returning the Simple Settings instance to everyone.
  *
- * @return Theme Settings instance
+ * @return Simple Settings instance
  */
 
-function theme_settings () {
-  return Theme_Settings::instance();
+function simple_settings () {
+  return Simple_Settings::instance();
 }
 
 // Let's make it global too!
-$GLOBALS['ts'] = &theme_settings();
+$GLOBALS['st'] = &simple_settings();
 
 endif;

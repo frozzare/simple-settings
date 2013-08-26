@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Theme settings
+ * Simple settings
  *
  * @copyright Copyright 2013 Fredrik Forsmo (http://forsmo.me)
  * @license The MIT License
@@ -10,9 +10,9 @@
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
-if (!class_exists('TS_Input_Tag')):
+if (!class_exists('ST_Input_Tag')):
 
-class TS_Input_Tag extends TS_Tag {
+class ST_Input_Tag extends ST_Tag {
 
   /**
    * Input construct.

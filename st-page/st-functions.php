@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Theme settings
+ * Simple settings
  *
  * @copyright Copyright 2013 Fredrik Forsmo (http://forsmo.me)
  * @license The MIT License
@@ -20,8 +20,8 @@ if (!defined('ABSPATH')) exit;
  * @return mixed
  */
 
-function ts_get_option ($option, $default = '') {
-  $option = tsarialize($option);
+function st_get_option ($option, $default = '') {
+  $option = starialize($option);
   return get_option($option, $default);
 }
 
@@ -35,8 +35,8 @@ function ts_get_option ($option, $default = '') {
  * @return boolean
  */
 
-function ts_update_option ($option, $new_value = '') {
-  $option = tsarialize($option);
+function st_update_option ($option, $new_value = '') {
+  $option = starialize($option);
   return update_option($option, $new_value);
 }
 
@@ -49,7 +49,7 @@ function ts_update_option ($option, $new_value = '') {
  * @return boolean
  */
 
-function ts_delete_option ($option) {
-  $option = tsarialize($option);
+function st_delete_option ($option) {
+  $option = starialize($option);
   return delete_option($option);
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Theme settings
+ * Simple settings
  *
  * @copyright Copyright 2013 Fredrik Forsmo (http://forsmo.me)
  * @license The MIT License
@@ -10,9 +10,9 @@
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
-if (!class_exists('TS_Select_Tag')):
+if (!class_exists('ST_Select_Tag')):
 
-class TS_Select_Tag extends TS_Tag {
+class ST_Select_Tag extends ST_Tag {
 
   /**
    * Select constructor.
@@ -48,7 +48,7 @@ class TS_Select_Tag extends TS_Tag {
 
   public function optionTags (array $options = array(), $selected = '') {
     $html = '';
-    $tag = new TS_Tag();
+    $tag = new ST_Tag();
     $tag->setTag('<option', '>', '</option>');
     foreach ($options as $opt) {
       $tag->reset();
