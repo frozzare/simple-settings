@@ -1,4 +1,4 @@
-wp-settings
+Simple settings
 ===========
 
-WordPress plugin that adds a settings page for your theme
+Simple settings page for your WordPress site!

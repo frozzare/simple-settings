@@ -1,6 +1,6 @@
 <?php
 
-class Colors extends TS_Page {
+class Colors_ST_Page extends ST_Page {
 
   /**
    * Set options for this tab
@@ -31,8 +31,7 @@ class Colors extends TS_Page {
 
   public function heading () {
     return array(
-      'text' => 'Color settings',
-      'html' => '<h1>%s</h1>'
+      'html' => '<h1>Color settings</h1>'
     );
   }
 
