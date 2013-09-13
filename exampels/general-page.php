@@ -19,7 +19,7 @@ class General_ST_Page extends ST_Page {
   /**
    * Add contact email field to the settings page.
    *
-   * @usage: ts_get_option('contact_email');
+   * @usage: st_get_option('contact_email');
    *
    */
 
@@ -28,7 +28,6 @@ class General_ST_Page extends ST_Page {
       'label' => 'Site contact email',
       'name' => 'contact_email',
       'input' => array(
-//        'name' => 'contact_email',
         'type' => 'text',
         'value' => ''
       )

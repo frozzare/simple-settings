@@ -71,6 +71,7 @@ class ST_Page {
       $name = str_replace('-st-page', '', $name);
       $name = ucfirst($name);
       $name .= '_ST_Page';
+      $name = str_replace('-', '_', $name);
       if (!isset($this->pages[$name])) {
         $this->pages[$name] = new $name;
       }
@@ -134,7 +135,7 @@ class ST_Page {
     ?>
     <div class="wrap">
       <div id="icon-options-general" class="icon32"><br></div>
-      <h2><?= __( $name . ' settings', 'simple_settings' ); ?></h2>
+      <h2><?php echo __( $name . ' settings', 'simple_settings' ); ?></h2>
       <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="update" />
         <table class="form-table">
@@ -175,7 +176,7 @@ class ST_Page {
               $field = new ST_Input_Tag (array(
                 'name' => $options['name'],
                 'value' => st_get_option($options['name']),
-                'type' => $options['input']['type']
+                'type' => $options['input']['type'],
               ));
             } else if (isset($options['textarea'])) {
               $field = new ST_Textarea_Tag (array(
@@ -190,6 +191,28 @@ class ST_Page {
               ));
             }
             $field->display();
+          } else if (isset($options['inputs']) && is_array($options['inputs'])) {
+            $output = '';
+            foreach ($options['inputs'] as $input) {
+              if (isset($input['label'])) {
+                $args = array(
+                  'html' => $input['label']
+                );
+                if (isset($options['name'])) {
+                  $args['for'] = $options['name'];
+                }
+                $label = new ST_Label_Tag($args);
+                $output .= $label->render();
+              }
+              $field = new ST_Input_Tag (array(
+                'name' => $options['name'],
+                'value' => st_get_option($options['name']),
+                'type' => $input['type'],
+                'class' => ''
+              ));
+              $output .= $field->render();
+            }
+            echo $output;
           } else {
             echo $options['html'];
           }
