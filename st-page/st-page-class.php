@@ -141,6 +141,13 @@ class ST_Page {
       <h2><?php echo __( $name . ' settings', 'simple_settings' ); ?></h2>
       <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="update" />
+        <?php if (isset($this->options['html']) || isset($this->options['text'])) {
+          if (isset($this->options['text'])) {
+            echo '<p>' . $this->options['text'] . '</p>';
+          } else {
+            echo $this->options['html'];
+          }
+        } ?>
         <table class="form-table">
           <tbody>
             <?php
