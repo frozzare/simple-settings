@@ -195,10 +195,6 @@ class ST_Tag {
 
   public function render () {
     $attributes = '';
-    /*if (!is_string($this->attributes['class']
-      && in_array($this->attributes['type'], array('text')))) {
-      $this->setAttribute('class', 'regular-text');
-    }*/
     foreach ($this->attributes as $key => $value) {
       if (is_string($key)) {
         if ($key == 'name') $value = starialize($value);

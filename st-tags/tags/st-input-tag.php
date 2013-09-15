@@ -20,7 +20,7 @@ class ST_Input_Tag extends ST_Tag {
    * @var array
    */
 
-  private $textFieldLiked = array('text', 'url', 'email', 'number', 'search', 'password');
+  private $textFieldLiked = array('text', 'url', 'email', 'search', 'password');
 
   /**
    * Input construct.

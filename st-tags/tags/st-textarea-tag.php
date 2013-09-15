@@ -22,6 +22,15 @@ class ST_Textarea_Tag extends ST_Tag {
 
   public function __construct (array $attributes = array()) {
     parent::__construct($attributes);
+    if (!isset($attributes['class'])) {
+      $this->setAttribute('class', 'large-text');
+    }
+    if (!isset($attributes['rows'])) {
+      $this->setAttribute('rows', 10);
+    }
+    if (!isset($attributes['cols'])) {
+      $this->setAttribute('cols', 50);
+    }
     $this->setTag('<textarea', '>', '</textarea>');
   }
 
