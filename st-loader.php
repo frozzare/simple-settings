@@ -119,17 +119,14 @@ class Simple_Settings {
    */
 
   private function setup_globals () {
-    $this->version          = '1.0.0';
-    $this->db_version       = 100;
-    $this->db_version_raw   = 0;
-
-    $this->table_prefix     = 'st_';
-
     // Paths
     $this->file             = __FILE__;
     $this->basename         = plugin_basename($this->file);
     $this->plugin_dir       = ST_PLUGIN_DIR;
     $this->plugin_url       = ST_PLUGIN_URL;
+
+    $this->name             = __('Simple settings', 'simple_settings');
+    $this->settings         = ' ' . __('Settings', 'simple_settings');
   }
 
   /**

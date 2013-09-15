@@ -32,11 +32,11 @@ class ST_Admin {
    */
 
    private function setup_globals () {
-     $ts = simple_settings();
+     $st = simple_settings();
 
      // Paths and URLs
-     $this->admin_dir  = trailingslashit($ts->plugin_dir  . 'st-core/admin' );
-     $this->admin_url  = trailingslashit($ts->plugin_url  . 'st-core/admin' ); // Admin url
+     $this->admin_dir  = trailingslashit($st->plugin_dir  . 'st-core/admin' );
+     $this->admin_url  = trailingslashit($st->plugin_url  . 'st-core/admin' ); // Admin url
      $this->images_url = trailingslashit($this->admin_url . 'images'        ); // Admin images URL
      $this->css_url    = trailingslashit($this->admin_url . 'css'           ); // Admin css URL
      $this->js_url     = trailingslashit($this->admin_url . 'js'            ); // Admin css URL
@@ -62,13 +62,13 @@ class ST_Admin {
 
      public function setup_actions () {
        // Add output to <head> tag
-       //add_action('ts_admin_head', array($this, 'admin_head'), 999);
+       add_action('st_admin_head', array($this, 'admin_head'), 999);
 
        // Add menu item to the menu
        add_action('st_admin_menu', array($this, 'admin_menus'), 5);
 
        // Enqueue all admin assets
-       //add_action('ts_admin_enqueue_scripts', array($this, 'enqueue_scripts'));
+       add_action('st_admin_enqueue_scripts', array($this, 'enqueue_scripts'));
     }
 
     /**
@@ -81,10 +81,12 @@ class ST_Admin {
       // Exit if user can't manage options
       if (!current_user_can('manage_options')) return;
 
+      $st = simple_settings();
+
       add_menu_page(
-        __('Simple settings', 'simple_settings'),
-        __('Simple settings', 'simple_settings'),
-        'manage_options', // manage_options
+        $st->name,
+        $st->name,
+        'manage_options',
         'st-page',
         array($this, 'st_page'),
         '',
@@ -93,15 +95,26 @@ class ST_Admin {
     }
 
     /**
-     * Simple settings main page.
+     * Empty page callback.
      *
      * @since 1.0
      */
 
-    public function ts_page () {
-      include 'admin/views/main-page.php';
+    public function st_page () {}
+
+    public function admin_head () {
+
     }
 
+    public function enqueue_scripts () {
+      wp_enqueue_style('st-admin-css', $this->css_url . 'admin.css', array(), '1.0.0');
+      wp_enqueue_script('jquery');
+      wp_enqueue_script('st-admin-js', $this->js_url . 'admin.js', array('jquery'), '1.0.0', true);
+    }
+
+    public function admin_footer () {
+      echo '<script type="text/javascript" src="' . $this->js_url . 'admin.js?ver=' . '1.0.0' . '"></script>';
+    }
 }
 
 function st_admin () {

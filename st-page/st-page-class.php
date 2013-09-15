@@ -15,14 +15,6 @@ if (!class_exists('ST_Page')):
 class ST_Page {
 
   /**
-   * Class key.
-   *
-   * @var string
-   */
-
-  private $key = 'ST_Page';
-
-  /**
    * Array with all loaded pages.
    *
    * @var array
@@ -70,7 +62,7 @@ class ST_Page {
    */
 
   private function setup_globals () {
-
+    $this->key = 'ST_Page';
   }
 
   /**
@@ -132,13 +124,14 @@ class ST_Page {
    */
 
   public function page_callback () {
+    $st = simple_settings();
     $this->update_settings();
     $name = $this->options['name'];
     $methods = $this->collect_methods($this);
     ?>
     <div class="wrap">
       <div id="icon-options-general" class="icon32"><br></div>
-      <h2><?php echo __( $name . ' settings', 'simple_settings' ); ?></h2>
+      <h2><?php echo $name . (isset($this->options['settings']) ? $this->options['settings'] : $st->settings); ?></h2>
       <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="update" />
         <?php if (isset($this->options['html']) || isset($this->options['text'])) {
