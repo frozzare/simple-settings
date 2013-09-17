@@ -3,7 +3,7 @@
 class Social_ST_Page extends ST_Page {
 
   /**
-   * Set options for this tab
+   * Set options for this page
    */
 
   public function __construct () {
