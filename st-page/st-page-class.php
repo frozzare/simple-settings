@@ -212,10 +212,16 @@ class ST_Page {
 
               if (isset($value['label'])) {
                 if (is_array($value['label'])) {
-                  $label = $this->label($options, array('label' => $value['label']['text']));
+                  $label = $this->label($options, array(
+                    'label' => $value['label']['text'],
+                    'name' => $value['name']
+                  ));
                   $label_position = $value['label']['position'];
                 } else {
-                  $label = $this->label($options, array('label' => $value['label']));
+                  $label = $this->label($options, array(
+                    'label' => $value['label'],
+                    'name' => $value['name']
+                  ));
                   $label_position = isset($value['label_position']) ? $value['label_position'] : 'after';
                 }
                 unset($value['label']);
@@ -248,6 +254,7 @@ class ST_Page {
                 }
 
                 if (strlen($label_position) == 0) {
+                  // if ($fieldset_wrap) $output .= '<br />';
                   $output .= $field->render();
                 }
 
@@ -287,6 +294,7 @@ class ST_Page {
    */
 
   private function field ($type = '', array $options = array(), array $args = array()) {
+    unset($args['field']);
     switch ($type) {
       case 'input':
         return $this->input($options, $args);
@@ -316,7 +324,7 @@ class ST_Page {
   private function input (array $options = array(), array $args = array()) {
     $name = isset($args['name']) ? $args['name'] : $options['name'];
     $value = st_get_option($name);
-    $value = strlen($value) ? $value : isset($args['value']) ? $args['value'] : '';
+    $value = empty($value) && isset($args['value']) ? $args['value'] : $value;
     if (!isset($args['type'])) $args['type'] = 'text';
     $field = new ST_Input_Tag (array(
       'name' => $name,
@@ -324,18 +332,52 @@ class ST_Page {
     ));
     if (isset($args['value'])) unset($args['value']);
     if (isset($args['type']) && ($args['type'] == 'radio' || $args['type'] == 'checkbox')) {
-      $label = $this->label($options);
-      $text = isset($args['text']) ? $args['text'] : '';
-      if (isset($args['text'])) unset($args['text']);
-      $field->setAttributes($args);
-      $html = $field->render();
+      $html = '';
+      $label = $this->label($options, array('name' => $args['name']));
+      $before = isset($args['text_before']);
+      $text = st_whitespace($before ? $args['text_before'] : $args['text']);
       $span = new ST_Span_Tag($text);
-      $html .= $span->render();
+
+      if ($before) {
+        unset($args['text_before']);
+        $field->setAttributes($args);
+        $html .= $span->render();
+        $html .= st_whitespace($field->render());
+      } else {
+        unset($args['text']);
+        $field->setAttributes($args);
+        $html .= st_whitespace($field->render());
+        $html .= $span->render();
+      }
+
       $label->setHtml($html);
       return $label;
     } else {
-      $field->setAttributes($args);
-      return $field;
+      if (isset($args['text']) || isset($args['text_before'])) {
+        $before = isset($args['text_before']);
+        $text = st_whitespace($before ? $args['text_before'] : $args['text'], true, $before);
+        $span = new ST_Span_Tag($text);
+        $html = '';
+
+        if ($before) {
+          unset($args['text_before']);
+          $field->setAttributes($args);
+          $html .= $span->render();
+          $html .= $field->render();
+        } else {
+          unset($args['text']);
+          $field->setAttributes($args);
+          $html .= $field->render();
+          $html .= $span->render();
+        }
+
+        $empty_tag = new ST_Tag();
+        $empty_tag->setHtml($html);
+        return $empty_tag;
+      } else {
+        $field->setAttributes($args);
+        return $field;
+      }
     }
   }
 
@@ -353,7 +395,7 @@ class ST_Page {
 
   private function label (array $options = array(), array $args = array()) {
     $html = isset($args['label']) ? $args['label'] : $options['label'];
-    $for = isset($options['name']) ? $options['name'] : '';
+    $for = isset($args['name']) ? $args['name'] : $options['name'];
     return new ST_Label_Tag(array(
      'for' => $for,
      'html' => $html
