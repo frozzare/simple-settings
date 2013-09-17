@@ -415,7 +415,9 @@ class ST_Page {
    */
 
   private function textarea (array $options = array(), array $args = array()) {
-    $html = isset($args['html']) ? $args['html'] : st_get_option($options['name']);
+    $name = isset($args['name']) ? $args['name'] : $options['name'];
+    $value = st_get_option($name);
+    $html = empty($value) && isset($args['html']) ? $args['html'] : $value;
     return new ST_Textarea_Tag (array(
       'name' => $options['name'],
       'html' => $html
