@@ -208,7 +208,8 @@ class ST_Tag {
         $tag .= $this->html;
       }
     }
-    return $tag . $this->tag_end;
+
+    return empty($this->tag_end) && !empty($this->html) ? $this->html : $tag . $this->tag_end;
   }
 
   /**
