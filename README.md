@@ -1,4 +1,4 @@
 Simple settings
 ===========
 
-Simple settings page for your WordPress site!
+Simple settings pages for your WordPress site!
