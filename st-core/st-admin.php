@@ -37,7 +37,6 @@ class ST_Admin {
      // Paths and URLs
      $this->admin_dir  = trailingslashit($st->plugin_dir  . 'st-core/admin' );
      $this->admin_url  = trailingslashit($st->plugin_url  . 'st-core/admin' ); // Admin url
-     $this->images_url = trailingslashit($this->admin_url . 'images'        ); // Admin images URL
      $this->css_url    = trailingslashit($this->admin_url . 'css'           ); // Admin css URL
      $this->js_url     = trailingslashit($this->admin_url . 'js'            ); // Admin css URL
    }
@@ -60,9 +59,9 @@ class ST_Admin {
      * @access private
      */
 
-     public function setup_actions () {
+     private function setup_actions () {
        // Add output to <head> tag
-       add_action('st_admin_head', array($this, 'admin_head'), 999);
+       // add_action('st_admin_head', array($this, 'admin_head'), 999);
 
        // Add menu item to the menu
        add_action('st_admin_menu', array($this, 'admin_menus'), 5);
@@ -102,9 +101,11 @@ class ST_Admin {
 
     public function st_page () {}
 
-    public function admin_head () {
-
-    }
+    /**
+     * Enqueue scripts and css.
+     *
+     * @since 1.0
+     */
 
     public function enqueue_scripts () {
       wp_enqueue_style('st-admin-css', $this->css_url . 'admin.css', array(), '1.0.0');
@@ -112,10 +113,13 @@ class ST_Admin {
       wp_enqueue_script('st-admin-js', $this->js_url . 'admin.js', array('jquery'), '1.0.0', true);
     }
 
-    public function admin_footer () {
-      echo '<script type="text/javascript" src="' . $this->js_url . 'admin.js?ver=' . '1.0.0' . '"></script>';
-    }
 }
+
+/**
+ * Returning new instance of Simple Settings admin class.
+ *
+ * @return object
+ */
 
 function st_admin () {
   new ST_Admin();

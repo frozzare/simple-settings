@@ -51,6 +51,7 @@ class ST_Page {
    private function collect_methods ($klass) {
      $tab_methods = get_class_methods($klass);
      $parent_methods = get_class_methods(get_parent_class($klass));
+     // if (isset($this->options) && is_array($this->options)) $this->options['key'] = get_class($this);
      return array_diff($tab_methods, $parent_methods);
    }
 
@@ -97,7 +98,9 @@ class ST_Page {
 
   public function setup_page () {
     if (empty($this->options)) return;
-    $slug = 'st-' . st_slug($this->options['name']);
+    $key = get_class($this);
+    $slug = strtolower($key);
+    $slug = str_replace('_', '-', $slug);
     add_submenu_page('st-page', $this->options['name'], $this->options['name'], 'manage_options', $slug, array($this, 'page_callback'));
   }
 
@@ -146,9 +149,7 @@ class ST_Page {
             <?php
               foreach ($methods as $method):
                 $options = $this->$method();
-                if (!isset($options['name'])) {
-                  $options['name'] = $method;
-                }
+                if (!isset($options['name'])) $options['name'] = $method;
                 $this->page_tr_row($options);
               endforeach;
             ?>
@@ -168,9 +169,7 @@ class ST_Page {
           $args = array(
             'html' => $options['label']
           );
-          if (isset($options['name'])) {
-            $args['for'] = $options['name'];
-          }
+          if (isset($options['name'])) $args['for'] = $options['name'];
           $label = new ST_Label_Tag($args);
           $label->display();
         ?>
@@ -318,6 +317,7 @@ class ST_Page {
     $name = isset($args['name']) ? $args['name'] : $options['name'];
     $value = st_get_option($name);
     $value = strlen($value) ? $value : isset($args['value']) ? $args['value'] : '';
+    if (!isset($args['type'])) $args['type'] = 'text';
     $field = new ST_Input_Tag (array(
       'name' => $name,
       'value' => $value
