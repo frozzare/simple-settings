@@ -77,6 +77,12 @@ class ST_Page_Admin {
     }
 }
 
+/**
+ * Returning new instance of Simple Settings page admin class.
+ *
+ * @return object
+ */
+
 function st_page_admin () {
   new SS_Page_Admin();
 }

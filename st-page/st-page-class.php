@@ -413,6 +413,12 @@ class ST_Page {
 
 }
 
+/**
+ * Returning new instance of Simple Settings page class.
+ *
+ * @return object
+ */
+
 function st_page () {
   new ST_Page();
 }
