@@ -4,8 +4,6 @@
  * This file contains actions and filters that are used through-out Simple settings.
  */
 
-// @todo make more internal actions like in campsite
-
 // Exit if accessed directly
 if (!defined('ABSPATH')) exit;
 

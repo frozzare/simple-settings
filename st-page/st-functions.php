@@ -32,7 +32,7 @@ function st_get_option ($option, $default = '') {
  * @param string $new_value
  * @since 1.0
  *
- * @return boolean
+ * @return bool
  */
 
 function st_update_option ($option, $new_value = '') {
@@ -46,7 +46,7 @@ function st_update_option ($option, $new_value = '') {
  * @param string $option
  * @since 1.0
  *
- * @return boolean
+ * @return bool
  */
 
 function st_delete_option ($option) {
