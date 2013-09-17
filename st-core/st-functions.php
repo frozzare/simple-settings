@@ -29,3 +29,24 @@ function starialize ($str = null) {
   }
   return 'st_';
 }
+
+/**
+ * Add whitespace before and/or after the given string.
+ *
+ * @param string $str
+ * @param bool $before Default true
+ * @param bool $after Default false
+ * @param int $length Length of the whitespace, both before and after length. Default 1.
+ * @since 1.0
+ *
+ * @return string
+ */
+
+function st_whitespace ($str = '', $before = true, $after = false, $length = 1) {
+  if (!is_null($str) && !empty($str)) {
+    $whitespace = '';
+    for ($i = 0; $i < $length; $i++) $whitespace .= ' ';
+    return ($before ? $whitespace : '') . $str . ($after ? $whitespace : '');
+  }
+  return $str;
+}
