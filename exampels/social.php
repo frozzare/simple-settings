@@ -65,7 +65,7 @@ class Social_ST_Page extends ST_Page {
    * Add Google+ fields to the settings page.
    */
 
-  public function googlep_url () {
+  public function googlep () {
     return array(
       'label' => 'Google+ url',
       'fields' => array(
