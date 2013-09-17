@@ -14,7 +14,7 @@ class Social_ST_Page extends ST_Page {
   }
 
   /**
-   * Add Facebook url field to the settings page.
+   * Add Facebook fields to the settings page.
    */
 
   public function facebook () {
@@ -38,7 +38,7 @@ class Social_ST_Page extends ST_Page {
   }
 
   /**
-   * Add Twitter url field to the settings page.
+   * Add Twitter fields to the settings page.
    */
 
   public function twitter () {
@@ -62,7 +62,7 @@ class Social_ST_Page extends ST_Page {
   }
 
   /**
-   * Add Google+ url field to the settings page.
+   * Add Google+ fields to the settings page.
    */
 
   public function googlep_url () {
