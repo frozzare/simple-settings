@@ -146,6 +146,9 @@ class ST_Page {
             <?php
               foreach ($methods as $method):
                 $options = $this->$method();
+                if (!isset($options['name'])) {
+                  $options['name'] = $method;
+                }
                 $this->page_tr_row($options);
               endforeach;
             ?>
