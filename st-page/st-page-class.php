@@ -253,8 +253,8 @@ class ST_Page {
                 }
 
                 if (strlen($label_position) == 0) {
-                  // if ($fieldset_wrap) $output .= '<br />';
                   $output .= $field->render();
+                  if (isset($value['br']) && $value['br']) $output .= '<br />';
                 }
 
                 if (!is_null($html_after) && strlen($html_after) > 0) {
@@ -293,7 +293,10 @@ class ST_Page {
    */
 
   private function field ($type = '', array $options = array(), array $args = array()) {
-    unset($args['field']);
+    $unsets = array('field', 'br');
+    foreach ($unsets as $unset) {
+      if (isset($args[$unset])) $args[$unset];
+    }
     switch ($type) {
       case 'input':
         return $this->input($options, $args);
