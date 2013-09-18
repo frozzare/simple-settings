@@ -51,7 +51,6 @@ class ST_Page {
    private function collect_methods ($klass) {
      $tab_methods = get_class_methods($klass);
      $parent_methods = get_class_methods(get_parent_class($klass));
-     // if (isset($this->options) && is_array($this->options)) $this->options['key'] = get_class($this);
      return array_diff($tab_methods, $parent_methods);
    }
 

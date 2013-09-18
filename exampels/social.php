@@ -1,5 +1,8 @@
 <?php
 
+// Exit if accessed directly
+if (!defined('ABSPATH')) exit;
+
 class Social_ST_Page extends ST_Page {
 
   /**
