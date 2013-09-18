@@ -50,16 +50,18 @@ class ST_Select_Tag extends ST_Tag {
     $html = '';
     $tag = new ST_Tag();
     $tag->setTag('<option', '>', '</option>');
-    $tag->reset();
-    if (isset($options['html'])) {
-      $tag->setHtml($options['html']);
-      unset($options['html']);
+    foreach ($options as $opt) {
+      $tag->reset();
+      if (isset($opt['html'])) {
+        $tag->setHtml($opt['html']);
+        unset($opt['html']);
+      }
+      $tag->setAttributes($opt);
+      if ($opt['value'] === $selected) {
+        $tag->setAttribute('selected', 'selected');
+      }
+      $html .= $tag->render();
     }
-    $tag->setAttributes($options);
-    if ($options['value'] === $selected) {
-      $tag->setAttribute('selected', 'selected');
-    }
-    $html .= $tag->render();
     $this->setHtml($html);
   }
 
