@@ -20,22 +20,13 @@ class Social_ST_Page extends ST_Page {
    * Add Facebook fields to the settings page.
    */
 
-  public function facebook () {
+  public function facebook_url () {
     return array(
       'label' => 'Facebook',
-      'fields' => array(
-        array(
-          'type' => 'url',
-          'field' => 'input',
-          'text_before' => 'Url',
-          'name' => 'facebook_url'
-        ),
-        array(
-          'type' => 'checkbox',
-          'field' => 'input',
-          'text_before' => 'Show like button',
-          'name' => 'facebook_hidden'
-        )
+      'input' => array(
+        'type' => 'url',
+        'text_before' => 'Url',
+        'name' => 'facebook_url'
       )
     );
   }

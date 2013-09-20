@@ -49,9 +49,25 @@ class ST_Page {
    */
 
    private function collect_methods ($klass) {
-     $tab_methods = get_class_methods($klass);
+     $page_methods = get_class_methods($klass);
      $parent_methods = get_class_methods(get_parent_class($klass));
-     return array_diff($tab_methods, $parent_methods);
+     return array_diff($page_methods, $parent_methods);
+   }
+
+   /**
+    * Collect all public vars from the class.
+    *
+    * @param object $klass
+    * @since 1.0
+    * @access private
+    *
+    * @return array
+    */
+
+   private function collect_vars ($klass) {
+     $page_vars = get_object_vars($klass);
+     $parent_vars = get_class_vars(get_parent_class($this));
+     return array_diff($page_vars, $parent_vars);
    }
 
   /**
@@ -129,7 +145,9 @@ class ST_Page {
     $st = simple_settings();
     $this->update_settings();
     $name = $this->options['name'];
+    $vars = $this->collect_vars($this);
     $methods = $this->collect_methods($this);
+    $fields = array_merge($vars, $methods);
     ?>
     <div class="wrap">
       <div id="icon-options-general" class="icon32"><br></div>
@@ -146,10 +164,17 @@ class ST_Page {
         <table class="form-table">
           <tbody>
             <?php
-              foreach ($methods as $method):
-                $options = $this->$method();
-                if (!isset($options['name'])) $options['name'] = $method;
-                $this->page_tr_row($options);
+            echo '<pre>';
+              print_r($fields);
+              foreach ($fields as $key => $field):
+                if (is_numeric($key)) {
+                  $options = $this->$field();
+                  if (!isset($options['name'])) $options['name'] = $field;
+                } else if (is_array($field) && $key !== 'options') {
+                  $options = $field;
+                  if (!isset($options['name'])) $options['name'] = $key;
+                }
+                if (!is_null($options)) $this->page_tr_row($options);
               endforeach;
             ?>
           </tbody>
@@ -176,30 +201,40 @@ class ST_Page {
       <td>
         <?php
           if (isset($options['input']) || isset($options['textarea']) || isset($options['select'])) {
+            $args = null;
+
             if (isset($options['input'])) {
-              $field = $this->input($options, $options['input']);
+              $args = $options['input'];
+              $field = $this->field('input', $options, $args);
             } else if (isset($options['textarea'])) {
-              $field = $this->textarea($options, $options['textarea']);
+              $args = $options['textarea'];
+              $field = $this->field('textarea', $options, $args);
             } else if (isset($options['select'])) {
-              $field = $this->select($options, $options['select']);
+              $args = $options['select'];
+              $field = $this->field('select', $options, $args);
             }
 
             $output = '';
 
-            if (isset($options['html_before'])) {
-              $output .= $options['html_before'];
+            if (isset($args['html_before'])) {
+              $output .= $args['html_before'];
             }
 
             $output .= $field->render();
 
-            if (isset($options['html_after'])) {
-              $output .= $options['html_after'];
+            if (isset($args['description'])) {
+              $output .= '<p class="description">' . $args['description'] . '</p>';
+            }
+
+            if (isset($args['html_after'])) {
+              $output .= $args['html_after'];
             }
 
             echo $output;
           } else if (isset($options['fields']) && is_array($options['fields'])) {
             $output = '';
             $fieldset_wrap = false;
+
             foreach ($options['fields'] as $key => $value) {
               $label = null;
               $label_position = '';
@@ -254,17 +289,15 @@ class ST_Page {
 
                 if (strlen($label_position) == 0) {
                   $output .= $field->render();
-                  if (isset($value['br']) && $value['br']) $output .= '<br />';
                 }
 
-                if (!is_null($html_after) && strlen($html_after) > 0) {
+                if (!is_null($html_after) && !empty($html_after)) {
                   $output .= $html_after;
                 }
               }
             }
 
             if ($fieldset_wrap) {
-              $output = str_replace('</label>', '</label><br/>', $output);
               $fieldset = new ST_Fieldset_Tag($output);
               $fieldset->display();
             } else {
@@ -293,9 +326,9 @@ class ST_Page {
    */
 
   private function field ($type = '', array $options = array(), array $args = array()) {
-    $unsets = array('field', 'br');
+    $unsets = array('field', 'html_before', 'html_after', 'description');
     foreach ($unsets as $unset) {
-      if (isset($args[$unset])) $args[$unset];
+      if (isset($args[$unset])) unset($args[$unset]);
     }
     switch ($type) {
       case 'input':
@@ -305,7 +338,7 @@ class ST_Page {
       case 'label':
         return $this->label($options, $args);
       case 'select':
-        return $this->label($options, $args);
+        return $this->select($options, $args);
       default:
         break;
     }
@@ -352,9 +385,14 @@ class ST_Page {
         $html .= $span->render();
       }
 
+      if (isset($args['br']) && $args['br'] !== false || !isset($args['br'])) {
+        $html .= '<br />';
+      }
+
       $label->setHtml($html);
       return $label;
     } else {
+      $br = isset($args['br']) && $args['br'] !== false;
       if (isset($args['text']) || isset($args['text_before'])) {
         $before = isset($args['text_before']);
         $text = st_whitespace($before ? $args['text_before'] : $args['text'], true, $before);
@@ -374,11 +412,16 @@ class ST_Page {
         }
 
         $empty_tag = new ST_Tag();
+        if ($br) $html .= '<br />';
         $empty_tag->setHtml($html);
         return $empty_tag;
       } else {
         $field->setAttributes($args);
-        return $field;
+        $empty_tag = new ST_Tag();
+        $html = $field->render();
+        if ($br) $html .= '<br />';
+        $empty_tag->setHtml($html);
+        return $empty_tag;
       }
     }
   }
