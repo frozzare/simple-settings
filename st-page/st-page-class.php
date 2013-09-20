@@ -164,17 +164,17 @@ class ST_Page {
         <table class="form-table">
           <tbody>
             <?php
-            echo '<pre>';
-              print_r($fields);
               foreach ($fields as $key => $field):
-                if (is_numeric($key)) {
-                  $options = $this->$field();
-                  if (!isset($options['name'])) $options['name'] = $field;
-                } else if (is_array($field) && $key !== 'options') {
-                  $options = $field;
-                  if (!isset($options['name'])) $options['name'] = $key;
+                if (is_numeric($key) || is_array($field) && $key !== 'options') {
+                  if (is_numeric($key)) {
+                    $options = $this->$field();
+                    if (!isset($options['name'])) $options['name'] = $field;
+                  } else {
+                    $options = $field;
+                    if (!isset($options['name'])) $options['name'] = $key;
+                  }
+                  if (!is_null($options)) $this->page_tr_row($options);
                 }
-                if (!is_null($options)) $this->page_tr_row($options);
               endforeach;
             ?>
           </tbody>
@@ -205,12 +205,15 @@ class ST_Page {
 
             if (isset($options['input'])) {
               $args = $options['input'];
+              if (is_string($args)) $args = array('type' => $args);
               $field = $this->field('input', $options, $args);
             } else if (isset($options['textarea'])) {
               $args = $options['textarea'];
+              if (is_string($args)) $args = array('type' => $args);
               $field = $this->field('textarea', $options, $args);
             } else if (isset($options['select'])) {
               $args = $options['select'];
+              if (is_string($args)) $args = array('type' => $args);
               $field = $this->field('select', $options, $args);
             }
 
@@ -239,6 +242,9 @@ class ST_Page {
               $label = null;
               $label_position = '';
               $html_after = '';
+
+              if (is_string($value)) $value = array('type' => $value);
+
 
               if (!$fieldset_wrap) {
                 $fieldset_wrap = $value['fieldset'] == true || $value['type'] == 'radio' || $value['type'] == 'checkbox';
