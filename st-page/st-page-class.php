@@ -15,6 +15,22 @@ if (!class_exists('ST_Page')):
 class ST_Page {
 
   /**
+   * Before save functions.
+   *
+   * @var array
+   */
+
+  private $before_save;
+
+  /**
+   * Error messages.
+   *
+   * @var array
+   */
+
+  private $before_save_errors;
+
+  /**
    * Array with all loaded pages.
    *
    * @var array
@@ -130,9 +146,28 @@ class ST_Page {
       $pattern = '/' . str_replace('_', '\_', starialize()) . '.*/';
       $keys = preg_grep($pattern, array_keys($_POST));
       foreach ($keys as $key) {
-        st_update_option($key, $_POST[$key]);
+        // var_dump($this->before_save);
+        // var_dump($key);
+        if (is_array($this->before_save) && isset($this->before_save[$key])) {
+         if ($this->before_save[$key]($_POST[$key]) !== false) {
+           st_update_option($key, $_POST[$key]);
+         } else {
+           $this->error_key = $key;
+           break;
+         }
+        } else {
+          st_update_option($key, $_POST[$key]);
+        }
       }
     }
+  }
+
+  public function show_error ($key) {
+    ?>
+    <div id="login_error">
+      <strong>ERROR</strong>: <?= $key; ?>
+    </div>
+    <?php
   }
 
   /**
@@ -152,6 +187,11 @@ class ST_Page {
     <div class="wrap">
       <div id="icon-options-general" class="icon32"><br></div>
       <h2><?php echo $name . (isset($this->options['settings']) ? $this->options['settings'] : $st->settings); ?></h2>
+      <?php if (isset($this->error_key) && !empty($this->error_key) && isset($this->before_save_errors[$this->error_key])): ?>
+        <div id="login_error">
+          <strong>ERROR</strong>: <?= $this->before_save_errors[$this->error_key]; ?>
+        </div>
+      <?php endif; ?>
       <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="update" />
         <?php if (isset($this->options['html']) || isset($this->options['text'])) {
@@ -164,8 +204,8 @@ class ST_Page {
         <table class="form-table">
           <tbody>
             <?php
-              foreach ($fields as $key => $field):
-                if (is_numeric($key) || is_array($field) && $key !== 'options') {
+              foreach ($fields as $key => $field) {
+                if (is_numeric($key) || is_array($field) && in_array($key, array('options', 'before_save', 'before_save_errors'))) {
                   if (is_numeric($key)) {
                     $options = $this->$field();
                     if (!isset($options['name'])) $options['name'] = $field;
@@ -175,7 +215,7 @@ class ST_Page {
                   }
                   if (!is_null($options)) $this->page_tr_row($options);
                 }
-              endforeach;
+              }
             ?>
           </tbody>
         </table>
@@ -333,6 +373,14 @@ class ST_Page {
 
   private function field ($type = '', array $options = array(), array $args = array()) {
     $unsets = array('field', 'html_before', 'html_after', 'description');
+    if (isset($options['name']) && isset($options['before_save']) && is_callable($options['before_save'])) {
+      $key = starialize($options['name']);
+      $this->before_save[$key] = $options['before_save'];
+      if (isset($this->options['before_save_error'])) {
+        $this->before_save_errors[$key] = $this->options['before_save_error'];
+      }
+    }
+    // var_dump($this->before_save);
     foreach ($unsets as $unset) {
       if (isset($args[$unset])) unset($args[$unset]);
     }
