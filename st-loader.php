@@ -20,7 +20,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Check so class don't exists before we creat it.
-if (!class_exists('Simple Settings')):
+if (!class_exists('Simple_Settings')):
 
 /**
  * Simple Settings class.
