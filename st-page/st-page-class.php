@@ -126,7 +126,7 @@ class ST_Page {
    */
 
   public function update_settings () {
-    if (isset($_POST['action']) && $_POST['action'] === 'update') {
+    if (isset($_POST['action']) && $_POST['action'] === 'update') {
       $pattern = '/' . str_replace('_', '\_', starialize()) . '.*/';
       $keys = preg_grep($pattern, array_keys($_POST));
       foreach ($keys as $key) {
@@ -247,7 +247,7 @@ class ST_Page {
 
 
               if (!$fieldset_wrap) {
-                $fieldset_wrap = $value['fieldset'] == true || $value['type'] == 'radio' || $value['type'] == 'checkbox';
+                $fieldset_wrap = isset($value['fieldset']) && $value['fieldset'] == true || $value['type'] == 'radio' || $value['type'] == 'checkbox';
               }
 
               if (isset($value['label'])) {
